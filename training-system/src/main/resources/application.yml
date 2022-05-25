@@ -1,4 +1,9 @@
+server:
+  port: 8080
+
 spring:
+  application:
+    name: training-system
   datasource:
     url: jdbc:postgresql://localhost:5432/word_train
     username: postgres

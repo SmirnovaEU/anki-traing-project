@@ -5,6 +5,8 @@ app:
   server-email: ${server.email}
 
 spring:
+  application:
+    name: email-notification
   datasource:
     initialization-mode: always
 
