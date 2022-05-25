@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.ord">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${dictionary.name}">Dictionary</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous"/>
+
+</head>
+<body>
+
+<br/><br/>
+<div class="container">
+
+    <h1 th:text="${dictionary.name}">Dictionary:</h1>
+    <br/><br/>
+    <h3 th:text="#{title.results}">Results</h3>
+    <table class="table table-bordered table-striped">
+
+        <thead class="thead-dark">
+        <tr>
+<!--            <th>ID</th>-->
+            <th th:text="#{field.word('')}">WORD</th>
+            <th th:text="#{field.success('')}">SUCCESS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="result : ${results}">
+<!--            <td th:text="${result.id}">1</td>-->
+            <td th:text="${result.word.name}">invariably</td>
+            <td th:text="${result.success}">0</td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="btn-toolbar" role="toolbar">
+        <a th:href="@{/words/all(dictId=${dictionary.id})}" class="btn btn-info mr-3"
+           th:text="#{title.dictionary}">To dictionary</a>
+        <a th:href="@{/words/schedule(dictId=${dictionary.id})}" class="btn btn-danger" th:text="#{title.schedule}">Schedule</a>
+    </div>
+
+</div>
+
+</body>
+</html>
