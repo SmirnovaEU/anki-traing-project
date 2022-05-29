@@ -41,7 +41,7 @@ public class SenderService {
         this.objectMapper = objectMapper;
     }
 
-    @Scheduled(initialDelay = 2000, fixedRate = 3000) //(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 0 12 * * ?")  //(initialDelay = 2000, fixedRate = 3000)
     public void sendLetters() throws JsonProcessingException {
 
         List<User> userList = userRepository.findAll();

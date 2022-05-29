@@ -14,11 +14,10 @@ import java.util.Locale;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
-    private LocaleChangeInterceptor lci;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        lci = localeChangeInterceptor();
+        LocaleChangeInterceptor lci = localeChangeInterceptor();
         registry.addInterceptor(lci);
     }
 
@@ -29,16 +28,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return lci;
     }
 
-
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:messages");
-        messageSource.setUseCodeAsDefaultMessage(true);
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
-
+    //settings changed in application.yml
+//    @Bean
+//    public MessageSource messageSource() {
+//        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+//        messageSource.setBasenames("classpath:messages");
+//        messageSource.setUseCodeAsDefaultMessage(true);
+//        messageSource.setDefaultEncoding("UTF-8");
+//        return messageSource;
+//    }
 
     @Bean
     public LocaleResolver localeResolver() {

@@ -3,6 +3,7 @@ package com.example.trainingsystem.controller;
 
 import com.example.trainingsystem.model.Dictionary;
 import com.example.trainingsystem.repository.DictionaryRepository;
+import com.example.trainingsystem.service.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +13,12 @@ import java.util.List;
 
 @Controller
 public class DictController {
-    final DictionaryRepository repository;
+
+    private final DictService service;
 
     @Autowired
-    public DictController(DictionaryRepository repository) {
-        this.repository = repository;
+    public DictController(DictService service) {
+        this.service = service;
     }
 
     @GetMapping("/")
@@ -27,7 +29,7 @@ public class DictController {
     @GetMapping("/dicts/all")
     public String dictionaryListPage(Model model) {
 
-        List<Dictionary> dicts = repository.findAll();;
+        List<Dictionary> dicts = service.getAll();
         model.addAttribute("dicts", dicts);
         return "dictList";
     }

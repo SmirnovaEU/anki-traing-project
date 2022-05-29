@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface DictionaryRepository extends CrudRepository<Dictionary, Long> {
 
-    @PostFilter("hasPermission(filterObject, 'READ')")
     List<Dictionary> findAll();
 
     List<Dictionary> findByUser(User user);

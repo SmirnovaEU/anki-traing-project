@@ -67,11 +67,14 @@ public class TrainService {
         return saved;
     }
 
-    public List<Result> doTraining(long id) {
-        Training training = trainingRepository.findById(id).orElseThrow();
+    public List<Result> doTraining(Training training) {
         List<Result> results = trainWords(training);
         formSchedule(training);
         return results;
+    }
+
+    public Training getTraining(long id) {
+        return trainingRepository.findById(id).orElseThrow();
     }
 
     private List<Result> trainWords(Training training) {
@@ -91,36 +94,40 @@ public class TrainService {
         for (Result result : results) {
             Word word = result.getWord();
             Schedule schedule = scheduleRepository.findByWord(word);
-            //обновить строчку расписания для слова
-            if (training.isRepeat()) {
-                //повторная тренировка
-                //вычисляем следующий этап
-                if (result.isSuccess()) {
-                    //успех
-                    if (schedule.getStage().equals(LearningStage.STAGE6)) {
-                        //если этап последний, то переводим в статус "выучено"
-                        schedule.setStatus(WordStatus.LEARNT);
-                        schedule.setLearntDate(LocalDate.now());
-                    } else {
-                        //если этап не последний, переводим на следующий этап
-                        int nextStageIndex = schedule.getStage().ordinal() + 2;
-                        LearningStage nextStage = LearningStage.valueOf("STAGE" + nextStageIndex);
-                        schedule.setStage(nextStage);
-                    }
-                }
-            } else {
-                //новая тренировка
-                //меняем статус
-                schedule.setStatus(WordStatus.IS_LEARNING);
-            }
-            //увеличить количество тренировок
-            schedule.setTotalTrainNumber(schedule.getTotalTrainNumber() + 1);
-            //записать дату последней тренировки
-            schedule.setLastTrainDate(training.getTrainingDate());
-            //вычислить дату следущей тренировки
-            int daysTillNextTrain = schedule.getStage().getDaysTillNextTrain();
-            schedule.setNextTrainDate(training.getTrainingDate().plusDays(daysTillNextTrain));
+            //обновить статус и стадию изучения слова
+            updateWordStatus(schedule, result, training.isRepeat());
+            //обновить даты и количество тренировок
+            updateSchedule(schedule, training);
             scheduleRepository.save(schedule);
         }
+    }
+
+    private void updateWordStatus(Schedule schedule, Result result, Boolean isRepeat) {
+        if (isRepeat) {
+            if (result.isSuccess()) {
+
+                if (schedule.getStage().equals(LearningStage.STAGE6)) {
+                    //если этап последний, то переводим в статус "выучено"
+                    schedule.setStatus(WordStatus.LEARNT);
+                    schedule.setLearntDate(LocalDate.now());
+                } else {
+                    //если этап не последний, переводим на следующий этап
+                    int nextStageIndex = schedule.getStage().ordinal() + 2;
+                    LearningStage nextStage = LearningStage.valueOf("STAGE" + nextStageIndex);
+                    schedule.setStage(nextStage);
+                }
+            }
+        } else {
+            //если новая тренировка, меняем статус
+            schedule.setStatus(WordStatus.IS_LEARNING);
+        }
+    }
+
+    private Schedule updateSchedule(Schedule schedule, Training training) {
+        schedule.setTotalTrainNumber(schedule.getTotalTrainNumber() + 1);
+        schedule.setLastTrainDate(training.getTrainingDate());
+        int daysTillNextTrain = schedule.getStage().getDaysTillNextTrain();
+        schedule.setNextTrainDate(training.getTrainingDate().plusDays(daysTillNextTrain));
+        return schedule;
     }
 }

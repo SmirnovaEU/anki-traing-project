@@ -1,5 +1,7 @@
 package com.example.trainingsystem.config;
 
+import com.rabbitmq.client.AMQP;
+import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -21,4 +23,5 @@ public class RabbitMqConfig {
     public TopicExchange topicExchange(){
         return new TopicExchange(MAIN_EXCHANGE_NAME);
     }
+
 }

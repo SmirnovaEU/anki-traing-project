@@ -15,7 +15,6 @@ import java.util.Set;
 @Data
 public class UserSecurity implements UserDetails {
 
-    @Autowired
     private User user;
 
     public UserSecurity(User user) {

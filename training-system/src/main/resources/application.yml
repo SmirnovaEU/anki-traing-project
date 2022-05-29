@@ -2,6 +2,11 @@ server:
   port: 8080
 
 spring:
+  messages:
+    encoding: UTF-8
+    basename: messages
+    use-code-as-default-message: true
+
   application:
     name: training-system
   datasource:
@@ -40,3 +45,4 @@ info:
     version: @project.version@
     author: lenu
     description: This is a multiuser anki training system
+

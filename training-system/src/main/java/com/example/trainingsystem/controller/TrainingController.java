@@ -32,7 +32,8 @@ public class TrainingController {
         Dictionary dict = dictRepository.findById(dictId).orElseThrow();
         model.addAttribute("training", training);
         model.addAttribute("dictionary", dict);
-        if (training.getWords().isEmpty()) return "nowords";
+        if (training.getWords().isEmpty())
+            return "nowords";
         return "training";
     }
 
@@ -49,8 +50,9 @@ public class TrainingController {
 
     @PostMapping("/trainings")
     public String createRepeatTraining(long id, Model model) {
-        List<Result> results = service.doTraining(id);
-        Training training = results.get(0).getTraining();
+        Training training = service.getTraining(id);
+        List<Result> results = service.doTraining(training);
+
         model.addAttribute("dictionary", training.getDictionary());
         model.addAttribute("results", results);
         return "result";

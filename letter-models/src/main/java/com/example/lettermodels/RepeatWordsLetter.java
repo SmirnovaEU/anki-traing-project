@@ -10,6 +10,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(
+        name = "repeat_letter-dictionaries-graph",
+        attributeNodes = {
+                @NamedAttributeNode("repeatDictionaries")
+        }
+)
 @Entity
 @Table(name = "repeat_letter")
 public class RepeatWordsLetter {
@@ -21,7 +27,7 @@ public class RepeatWordsLetter {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "repeat_dictionary_id", nullable = false)
     private List<DictionaryForRepeat> repeatDictionaries;
 

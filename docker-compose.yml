@@ -15,11 +15,15 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
     networks:
       - nw
+    depends_on:
+      - postgres
   rabbitmq:
     image: rabbitmq:management
     ports:
       - "5672:5672"
       - "15672:15672"
+    depends_on:
+      - app
   postgres:
     image: "postgres"
     ports:

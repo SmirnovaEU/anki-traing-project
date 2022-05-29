@@ -74,7 +74,7 @@ public class WordController {
     }
 
     @PostMapping("/words/addWord")
-    public String createWord(@RequestParam("dictId") long dictId, NewWordDto wordForm, Model model, RedirectAttributes redirectAttributes) {
+    public String createWord(@RequestParam("dictId") long dictId, NewWordDto wordForm, RedirectAttributes redirectAttributes) {
         service.createWord(wordForm, dictId);
         redirectAttributes.addAttribute("dictId", dictId);
         return "redirect:/words/all";
@@ -83,7 +83,6 @@ public class WordController {
     @GetMapping("/words/delete")
     public String deleteWord(@RequestParam Long id, @RequestParam long dictId, RedirectAttributes redirectAttributes) {
         repository.deleteById(id);
-        //Word word = repository.findById(id).orElseThrow();
         redirectAttributes.addAttribute("dictId", dictId);
         return "redirect:/words/all";
     }

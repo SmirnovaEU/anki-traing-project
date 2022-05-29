@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMqConfig {
+    //using now
     @Bean
     public Queue repeatNotificationQueue() {
         return new Queue("repeat-notifications-queue");
     }
 
+    //not using now
     @Bean
     public TopicExchange topicExchange(){
         return new TopicExchange("main-exchange");
@@ -22,7 +24,8 @@ public class RabbitMqConfig {
     @Bean
     public Binding notificationBinding(){
         return BindingBuilder.bind(repeatNotificationQueue())
-                .to(topicExchange())
-                .with("notification.repeat");
+          .to(topicExchange())
+          .with("notification.repeat");
+
     }
 }

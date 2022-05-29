@@ -16,7 +16,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByDictionary(Dictionary dictionary);
 
     @Query(value = "select s from schedule s where s.dictionary = ?1 and " +
-            "s.status <> ?2 order by s.nextTrainDate") //and s.nextTrainDate < ?3
+            "s.status <> ?2 and s.nextTrainDate < ?3 order by s.nextTrainDate") //and s.nextTrainDate < ?3
     List<Schedule> findWordsForRepeat(Dictionary dict, WordStatus newStatus, LocalDate currentDate);
 
     @Query(value = "select s from schedule s where s.dictionary = ?1 and " +
