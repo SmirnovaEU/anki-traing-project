@@ -14,6 +14,9 @@
         <module>email-notification</module>
         <module>training-system</module>
         <module>letter-models</module>
+        <module>configuration-server</module>
+        <module>hystrix-dashboard</module>
+        <module>eureka-discovery-server</module>
     </modules>
 
 </project>

@@ -21,11 +21,25 @@ spring:
       use-new-id-generator-mappings: false
     show-sql: true
 
+hystrix:
+  shareSecurityContext: true
+  command:
+    dictionaryKey:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,logfile
+        include: health,metrics,logfile, info
   endpoint:
     health:
       show-details: always

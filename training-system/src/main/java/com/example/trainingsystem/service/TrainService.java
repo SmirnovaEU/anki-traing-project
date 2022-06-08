@@ -4,6 +4,9 @@ import com.example.trainingsystem.controller.NotFoundException;
 import com.example.trainingsystem.model.*;
 import com.example.trainingsystem.repository.*;
 import com.example.trainingsystem.security.UserSecurity;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,6 +22,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class TrainService {
     private final ScheduleRepository scheduleRepository;
     private final ResultRepository resultRepository;
@@ -39,6 +43,7 @@ public class TrainService {
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Training newTraining(long dictId) {
+
         Dictionary dict = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,6 +56,7 @@ public class TrainService {
 
         return saved;
     }
+
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Training repeatTraining(long dictId) {

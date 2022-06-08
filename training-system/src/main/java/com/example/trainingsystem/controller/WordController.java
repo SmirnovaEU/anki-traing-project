@@ -7,6 +7,7 @@ import com.example.trainingsystem.model.Word;
 import com.example.trainingsystem.repository.DictionaryRepository;
 import com.example.trainingsystem.repository.ScheduleRepository;
 import com.example.trainingsystem.repository.WordRepository;
+import com.example.trainingsystem.service.DictService;
 import com.example.trainingsystem.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,24 +25,22 @@ import java.util.List;
 @Controller
 public class WordController {
 
-    private final WordRepository repository;
-    private final DictionaryRepository dictRepository;
+    private final DictService dictService;
     private final WordService service;
     private final ScheduleRepository scheduleRepository;
 
 
     @Autowired
-    public WordController(WordRepository repository, DictionaryRepository dictRepository, WordService service, ScheduleRepository scheduleRepository) {
-        this.repository = repository;
-        this.dictRepository = dictRepository;
+    public WordController(DictService dictService, WordService service, ScheduleRepository scheduleRepository) {
+        this.dictService = dictService;
         this.service = service;
         this.scheduleRepository = scheduleRepository;
     }
 
     @GetMapping("/words/all")
     public String dictionaryPage(@RequestParam("dictId") long dictId, Model model) {
-        Dictionary dict = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
-        List<Word> dictWords = repository.findAllByDictionary(dict);
+        Dictionary dict = dictService.getById(dictId);
+        List<Word> dictWords = service.getAllByDictionary(dict);
         model.addAttribute("dictionary", dict);
         model.addAttribute("words", dictWords);
         return "dict";
@@ -49,7 +48,7 @@ public class WordController {
 
     @GetMapping("words/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
-        Word word = repository.findById(id).orElseThrow(NotFoundException::new);
+        Word word = service.getById(id);
         model.addAttribute("word", word);
         return "edit";
     }
@@ -57,9 +56,7 @@ public class WordController {
     @GetMapping("/words/addWord")
     public String editNewPage(@RequestParam("id") long dictId, Model model) {
         NewWordDto wordForm = new NewWordDto();
-
-        Dictionary dictionary = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
-
+        Dictionary dictionary = dictService.getById(dictId);
         model.addAttribute("wordForm", wordForm);
         model.addAttribute("dictionary", dictionary);
         return "add";
@@ -82,14 +79,14 @@ public class WordController {
 
     @GetMapping("/words/delete")
     public String deleteWord(@RequestParam Long id, @RequestParam long dictId, RedirectAttributes redirectAttributes) {
-        repository.deleteById(id);
+        service.removeById(id);
         redirectAttributes.addAttribute("dictId", dictId);
         return "redirect:/words/all";
     }
 
     @GetMapping("/words/schedule")
     public String schedulePage(@RequestParam("dictId") long dictId, Model model, RedirectAttributes redirectAttributes) {
-        Dictionary dict = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
+        Dictionary dict = dictService.getById(dictId);
         List<Schedule> dictSchedule = scheduleRepository.findAllByDictionary(dict);
         model.addAttribute("dictionary", dict);
         model.addAttribute("schedules", dictSchedule);
