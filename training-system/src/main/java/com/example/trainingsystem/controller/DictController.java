@@ -30,6 +30,9 @@ public class DictController {
     public String dictionaryListPage(Model model) {
 
         List<Dictionary> dicts = service.getAll();
+        if (dicts.isEmpty()) {
+            return "dictNotAvailable";
+        }
         model.addAttribute("dicts", dicts);
         return "dictList";
     }

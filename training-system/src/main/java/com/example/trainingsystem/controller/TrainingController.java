@@ -4,6 +4,7 @@ import com.example.trainingsystem.model.Dictionary;
 import com.example.trainingsystem.model.Result;
 import com.example.trainingsystem.model.Training;
 import com.example.trainingsystem.repository.DictionaryRepository;
+import com.example.trainingsystem.service.DictService;
 import com.example.trainingsystem.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,21 +18,18 @@ import java.util.List;
 @Controller
 public class TrainingController {
     private final TrainService service;
-    private final DictionaryRepository dictRepository;
 
     @Autowired
-    public TrainingController(TrainService service, DictionaryRepository dictRepository) {
+    public TrainingController(TrainService service) {
         this.service = service;
-        this.dictRepository = dictRepository;
     }
 
     @GetMapping("/trainings/new")
     public String getNewTraining(@RequestParam("dictId") long dictId, Model model) {
 
         Training training = service.newTraining(dictId);
-        Dictionary dict = dictRepository.findById(dictId).orElseThrow();
         model.addAttribute("training", training);
-        model.addAttribute("dictionary", dict);
+        model.addAttribute("dictionary", training.getDictionary());
         if (training.getWords().isEmpty())
             return "nowords";
         return "training";
@@ -41,9 +39,8 @@ public class TrainingController {
     public String getRepeatTraining(@RequestParam("dictId") long dictId, Model model) {
 
         Training training = service.repeatTraining(dictId);
-        Dictionary dict = dictRepository.findById(dictId).orElseThrow();
         model.addAttribute("training", training);
-        model.addAttribute("dictionary", dict);
+        model.addAttribute("dictionary", training.getDictionary());
         if (training.getWords().isEmpty()) return "nowords";
         return "training";
     }
